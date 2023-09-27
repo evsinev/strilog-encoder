@@ -11,6 +11,14 @@ Outputs log events as json
 ## Include to pom.xml
 
 ```xml
+<repositories>
+    <repository>
+        <id>pne</id>
+        <name>payneteasy repo</name>
+        <url>https://maven.pne.io</url>
+    </repository>
+</repositories>
+
 <dependency>
     <groupId>com.payneteasy.strilog-encoder</groupId>
     <artifactId>strilog-json-encoder-shaded</artifactId>
