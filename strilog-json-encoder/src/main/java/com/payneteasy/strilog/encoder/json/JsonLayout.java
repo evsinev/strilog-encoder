@@ -7,17 +7,23 @@ import org.slf4j.event.KeyValuePair;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import static java.time.ZonedDateTime.now;
 
 public class JsonLayout {
 
     private static final ZoneId ZONE_ID = ZoneId.systemDefault();
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
-    private final DslJson<LogEvent> dslJson = new DslJson<>();
+    private final DslJson<LogEvent> dslJson   = new DslJson<>();
+
+    private final byte[] stx;
+    private final byte[] etx;
+
+    public JsonLayout(byte[] stx, byte[] etx) {
+        this.stx = stx;
+        this.etx = etx;
+    }
 
     public byte[] doLayout(ILoggingEvent aEvent) {
         LogEvent log;
@@ -48,11 +54,17 @@ public class JsonLayout {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            out.write(0x02);
-            out.write('0');
+            if (stx != null) {
+                out.write(stx);
+            }
+
             dslJson.serialize(log, out);
+
             out.write('\n');
-            out.write(0x03);
+
+            if(etx != null) {
+                out.write(etx);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
