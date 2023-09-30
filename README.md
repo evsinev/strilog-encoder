@@ -22,7 +22,7 @@ Outputs log events as json
 <dependency>
     <groupId>com.payneteasy.strilog-encoder</groupId>
     <artifactId>strilog-json-encoder-shaded</artifactId>
-    <version>1.0-2</version>
+    <version>1.0-4</version>
 </dependency>
 ```
 
