@@ -1,45 +1,42 @@
 package com.payneteasy.strilog.encoder.json;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import com.dslplatform.json.DslJson;
+import com.payneteasy.strilog.encoder.core.ErrorInfo;
+import com.payneteasy.strilog.encoder.core.LogEvent;
+import com.payneteasy.strilog.encoder.core.LogEventEncoder;
 import org.slf4j.event.KeyValuePair;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.payneteasy.strilog.encoder.core.LogEvents.*;
+import static com.payneteasy.strilog.encoder.json.ErrorInfos.createErrorInfo;
 
 public class JsonLayout {
 
-    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS Z");
-    private final DslJson<LogEvent> dslJson   = new DslJson<>();
-
-    private final byte[] stx;
-    private final byte[] etx;
+    private final LogEventEncoder encoder;
 
     public JsonLayout(byte[] stx, byte[] etx) {
-        this.stx = stx;
-        this.etx = etx;
+        encoder = new LogEventEncoder(stx, etx);
     }
 
     public byte[] doLayout(ILoggingEvent aEvent) {
         LogEvent log;
 
         try {
-            ErrorInfo error = ErrorInfo.create(aEvent.getThrowableProxy());
+            ErrorInfo error = createErrorInfo(aEvent.getThrowableProxy());
 
             log = new LogEvent()
-                    .setDate             ( formatter.format(aEvent.getInstant().atZone(ZONE_ID)))
+                    .setDate             ( formatDate(aEvent.getInstant())   )
                     .setClazz            ( aEvent.getLoggerName()            )
                     .setLevel            ( getLevel(aEvent)                  )
                     .setArgs             ( toList(aEvent.getArgumentArray()) )
                     .setEpoch            ( aEvent.getTimeStamp()             )
                     .setTemplate         ( aEvent.getMessage()               )
                     .setThread           ( aEvent.getThreadName()            )
-                    .setMdc              ( aEvent.getMDCPropertyMap()        )
+                    .setMdc              ( toMdc(aEvent.getMDCPropertyMap()) )
                     .setKv               ( toKv(aEvent.getKeyValuePairs())   )
                     .setStacktrace       ( error.getStackTrace()             )
                     .setExceptionLine    ( error.getExceptionLine()          )
@@ -47,28 +44,10 @@ public class JsonLayout {
             ;
         } catch (Throwable e) {
             e.printStackTrace();
-            log = new LogEvent()
-                    .setEpoch(System.currentTimeMillis())
-                    .setExceptionMessage(e.getMessage());
+            log = createLogEventWithException(e);
         }
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            if (stx != null) {
-                out.write(stx);
-            }
-
-            dslJson.serialize(log, out);
-
-            out.write('\n');
-
-            if(etx != null) {
-                out.write(etx);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return out.toByteArray();
+        return encoder.toBytesArray(log);
     }
 
     private Map<String, String> toKv(List<KeyValuePair> aPairs) {
@@ -83,25 +62,8 @@ public class JsonLayout {
         return kv;
     }
 
-    private String getLevel(ILoggingEvent aEvent) {
+    public static String getLevel(ILoggingEvent aEvent) {
         return aEvent.getLevel() != null ? aEvent.getLevel().toString() : "DEBUG";
-    }
-
-
-    private List<String> toList(Object[] aArguments) {
-        if (aArguments == null || aArguments.length == 0) {
-            return null;
-        }
-
-        ArrayList<String> result = new ArrayList<>(aArguments.length);
-        for (Object arg : aArguments) {
-            if (arg != null) {
-                result.add(arg.toString());
-            } else {
-                result.add(null);
-            }
-        }
-        return result;
     }
 
 }

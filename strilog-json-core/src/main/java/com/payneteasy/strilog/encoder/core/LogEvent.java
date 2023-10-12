@@ -1,4 +1,4 @@
-package com.payneteasy.strilog.encoder.json;
+package com.payneteasy.strilog.encoder.core;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;

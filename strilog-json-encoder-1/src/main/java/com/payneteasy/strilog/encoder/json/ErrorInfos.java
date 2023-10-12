@@ -3,24 +3,13 @@ package com.payneteasy.strilog.encoder.json;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 import ch.qos.logback.classic.spi.ThrowableProxyUtil;
-import lombok.Builder;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
+import com.payneteasy.strilog.encoder.core.ErrorInfo;
 
-import static lombok.AccessLevel.PRIVATE;
+import static com.payneteasy.strilog.encoder.core.ErrorInfo.EMPTY;
 
-@Data
-@FieldDefaults(makeFinal = true, level = PRIVATE)
-@Builder
-public class ErrorInfo {
+public class ErrorInfos {
 
-    private static final ErrorInfo EMPTY = ErrorInfo.builder().build();
-
-    String stackTrace;
-    String exceptionLine;
-    String exceptionMessage;
-
-    public static ErrorInfo create(IThrowableProxy aProxy) {
+    public static ErrorInfo createErrorInfo(IThrowableProxy aProxy) {
         if(aProxy == null) {
             return EMPTY;
         }

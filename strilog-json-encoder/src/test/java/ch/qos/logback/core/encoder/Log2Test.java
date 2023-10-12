@@ -1,14 +1,16 @@
 package ch.qos.logback.core.encoder;
 
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-public class ExampleApp {
+public class Log2Test {
 
-    private static final Logger LOG = LoggerFactory.getLogger( ExampleApp.class );
+    private static final Logger LOG = LoggerFactory.getLogger( Log2Test.class );
 
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         LOG.info("Hello");
         LOG.info("argument {}", 1);
         MDC.put("key-1", "value-1");
@@ -21,12 +23,5 @@ public class ExampleApp {
                 .addKeyValue("key-1", "value-1")
                 .log("Key value message");
 
-//        for(int i=0; i<200; i++) {
-//            new Thread(() -> {
-//                for(int k=0; k<10_000; k++) {
-//                    LOG.warn("Null argument {} {} {}", null, 1, null);
-//                }
-//            }).start();
-//        }
     }
 }
