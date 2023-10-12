@@ -17,9 +17,13 @@ import static com.payneteasy.strilog.encoder.json.ErrorInfos.createErrorInfo;
 public class JsonLayout {
 
     private final LogEventEncoder encoder;
+    private final String          appName;
+    private final String          appInstance;
 
-    public JsonLayout(byte[] stx, byte[] etx) {
-        encoder = new LogEventEncoder(stx, etx);
+    public JsonLayout(byte[] stx, byte[] etx, String aAppName, String aAppInstance) {
+        encoder     = new LogEventEncoder(stx, etx);
+        appName     = aAppName;
+        appInstance = aAppInstance;
     }
 
     public byte[] doLayout(ILoggingEvent aEvent) {
@@ -41,6 +45,8 @@ public class JsonLayout {
                     .setStacktrace       ( error.getStackTrace()             )
                     .setExceptionLine    ( error.getExceptionLine()          )
                     .setExceptionMessage ( error.getExceptionMessage()       )
+                    .setAppName          ( appName                           )
+                    .setAppInstance      ( appInstance                       )
             ;
         } catch (Throwable e) {
             e.printStackTrace();

@@ -46,15 +46,21 @@ public class LogEvent {
     @JsonAttribute(index = 8)
     Map<String, String> kv;
 
-    @JsonAttribute(index = 9)
+    @JsonAttribute(index = 9, name = "message_id")
     String messageId;
 
     @JsonAttribute(index = 10)
     String stacktrace;
 
-    @JsonAttribute(index = 11)
+    @JsonAttribute(index = 11, name = "exception_line")
     String exceptionLine;
 
-    @JsonAttribute(index = 12)
+    @JsonAttribute(index = 12, name = "exception_message")
     String exceptionMessage;
+
+    @JsonAttribute(index = 13, name = "app_name")
+    String appName;
+
+    @JsonAttribute(index = 14, name = "app_instance")
+    String appInstance;
 }

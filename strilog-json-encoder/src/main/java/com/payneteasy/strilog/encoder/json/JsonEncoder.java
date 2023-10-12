@@ -7,7 +7,18 @@ import static com.payneteasy.strilog.encoder.core.LogEvents.EMPTY_BYTES;
 
 public class JsonEncoder<E> extends EncoderBase<E> {
 
-    private final JsonLayout layout = new JsonLayout(null, null);
+    private JsonLayout layout;
+
+    @Override
+    public void start() {
+        layout = new JsonLayout(
+                null
+                , null
+                , context.getProperty("app-name")
+                , context.getProperty("app-instance")
+        );
+        super.start();
+    }
 
     @Override
     public byte[] headerBytes() {
