@@ -29,6 +29,9 @@ Outputs log events as json
 ## Configure logback.xml
 
 ```xml
+<property scope="context" name="app-name"     value="example"   />
+<property scope="context" name="app-instance" value="example-1" />
+
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="com.payneteasy.strilog.encoder.json.JsonEncoder">
     </encoder>
