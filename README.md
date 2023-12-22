@@ -1,9 +1,6 @@
 ## Overview
 
-Sends log messages from strilog-encoder to srvlog
-
-* strilog-encoder https://github.com/evsinev/strilog-encoder
-* srvlog https://github.com/payneteasy/srvlog
+Outputs log events to json format
 
 ## Features
 
