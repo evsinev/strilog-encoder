@@ -1,6 +1,6 @@
 ## Overview
 
-Outputs log events to json format
+Outputs log events to json format (https://ndjson.org)
 
 ## Features
 
