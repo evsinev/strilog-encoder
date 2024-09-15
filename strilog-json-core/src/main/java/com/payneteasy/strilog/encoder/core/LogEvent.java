@@ -63,4 +63,11 @@ public class LogEvent {
 
     @JsonAttribute(index = 14, name = "app_instance")
     String appInstance;
+
+    @JsonAttribute(index = 15)
+    String hostname;
+
+    @JsonAttribute(index = 16)
+    long cycle;
+
 }

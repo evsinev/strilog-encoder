@@ -1,6 +1,7 @@
 package com.payneteasy.strilog.encoder.json;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.payneteasy.strilog.encoder.core.CycleGenerator;
 import com.payneteasy.strilog.encoder.core.ErrorInfo;
 import com.payneteasy.strilog.encoder.core.LogEvent;
 import com.payneteasy.strilog.encoder.core.LogEventEncoder;
@@ -19,11 +20,15 @@ public class JsonLayout {
     private final LogEventEncoder encoder;
     private final String          appName;
     private final String          appInstance;
+    private final String          hostname;
+    private final CycleGenerator  cycleGenerator;
 
-    public JsonLayout(byte[] stx, byte[] etx, String aAppName, String aAppInstance) {
-        encoder     = new LogEventEncoder(stx, etx);
-        appName     = aAppName;
-        appInstance = aAppInstance;
+    public JsonLayout(byte[] stx, byte[] etx, String aAppName, String aAppInstance, String aHostname, CycleGenerator aCycleGenerator) {
+        encoder        = new LogEventEncoder(stx, etx);
+        appName        = aAppName;
+        appInstance    = aAppInstance;
+        hostname       = aHostname;
+        cycleGenerator = aCycleGenerator;
     }
 
     public byte[] doLayout(ILoggingEvent aEvent) {
@@ -47,6 +52,8 @@ public class JsonLayout {
                     .setExceptionMessage ( error.getExceptionMessage()       )
                     .setAppName          ( appName                           )
                     .setAppInstance      ( appInstance                       )
+                    .setHostname         ( hostname                          )
+                    .setCycle            ( cycleGenerator.nextCycle()        )
             ;
         } catch (Throwable e) {
             e.printStackTrace();
