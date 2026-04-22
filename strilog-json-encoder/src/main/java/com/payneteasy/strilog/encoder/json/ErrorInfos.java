@@ -18,6 +18,7 @@ public class ErrorInfos {
                 .stackTrace         ( ThrowableProxyUtil.asString(aProxy) )
                 .exceptionLine      ( getExceptionLine(aProxy)            )
                 .exceptionMessage   ( aProxy.getMessage()                 )
+                .exceptionType      ( aProxy.getClassName()               )
                 .build();
     }
 

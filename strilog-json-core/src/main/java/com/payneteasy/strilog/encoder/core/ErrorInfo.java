@@ -16,5 +16,6 @@ public class ErrorInfo {
     String stackTrace;
     String exceptionLine;
     String exceptionMessage;
+    String exceptionType;
 
 }
