@@ -70,4 +70,7 @@ public class LogEvent {
     @JsonAttribute(index = 16)
     long cycle;
 
+    @JsonAttribute(index = 17, name = "exception_type")
+    String exceptionType;
+
 }

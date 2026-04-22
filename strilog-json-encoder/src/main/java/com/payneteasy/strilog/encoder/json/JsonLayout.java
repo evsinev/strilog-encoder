@@ -50,6 +50,7 @@ public class JsonLayout {
                     .setStacktrace       ( error.getStackTrace()             )
                     .setExceptionLine    ( error.getExceptionLine()          )
                     .setExceptionMessage ( error.getExceptionMessage()       )
+                    .setExceptionType    ( error.getExceptionType()          )
                     .setAppName          ( appName                           )
                     .setAppInstance      ( appInstance                       )
                     .setHostname         ( hostname                          )
