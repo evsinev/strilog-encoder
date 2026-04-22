@@ -2,6 +2,7 @@ package com.payneteasy.strilog.encoder.json;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.encoder.EncoderBase;
+import ch.qos.logback.core.spi.PropertyDefiner;
 import com.payneteasy.strilog.encoder.core.CycleGenerator;
 
 import static com.payneteasy.strilog.encoder.core.LogEvents.EMPTY_BYTES;
@@ -9,15 +10,23 @@ import static com.payneteasy.strilog.encoder.core.Hostnames.getHostname;
 
 public class JsonEncoderStxEtx<E> extends EncoderBase<E> {
 
-    private JsonLayout layout;
+    private JsonLayout       layout;
+    private PropertyDefiner  versionProvider;
+
+    public void setVersionProvider(PropertyDefiner aVersionProvider) {
+        versionProvider = aVersionProvider;
+    }
 
     @Override
     public void start() {
+        String version = versionProvider != null ? versionProvider.getPropertyValue() : null;
+
         layout = new JsonLayout(
                   new byte[] {0x02, 0x20} // STX 0
                 , new byte[] {0x03}       // ETX 00
                 , context.getProperty("app-name")
                 , context.getProperty("app-instance")
+                , version
                 , getHostname()
                 , new CycleGenerator()
         );

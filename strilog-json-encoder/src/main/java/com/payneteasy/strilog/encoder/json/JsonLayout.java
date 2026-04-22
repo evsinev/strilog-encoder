@@ -20,13 +20,15 @@ public class JsonLayout {
     private final LogEventEncoder encoder;
     private final String          appName;
     private final String          appInstance;
+    private final String          version;
     private final String          hostname;
     private final CycleGenerator  cycleGenerator;
 
-    public JsonLayout(byte[] stx, byte[] etx, String aAppName, String aAppInstance, String aHostname, CycleGenerator aCycleGenerator) {
+    public JsonLayout(byte[] stx, byte[] etx, String aAppName, String aAppInstance, String aVersion, String aHostname, CycleGenerator aCycleGenerator) {
         encoder        = new LogEventEncoder(stx, etx);
         appName        = aAppName;
         appInstance    = aAppInstance;
+        version        = aVersion;
         hostname       = aHostname;
         cycleGenerator = aCycleGenerator;
     }
@@ -53,6 +55,7 @@ public class JsonLayout {
                     .setExceptionType    ( error.getExceptionType()          )
                     .setAppName          ( appName                           )
                     .setAppInstance      ( appInstance                       )
+                    .setVersion          ( version                           )
                     .setHostname         ( hostname                          )
                     .setCycle            ( cycleGenerator.nextCycle()        )
             ;
